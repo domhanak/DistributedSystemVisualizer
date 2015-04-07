@@ -1,0 +1,59 @@
+[
+    {
+      "duration": "100",
+      "id":"1",
+      "machines":[
+        {
+          "addTime":0,
+          "name":"test-2",
+          "id":2,
+          "queries":[
+            {   "addTime":0,
+              "query":"\"test-query-1",
+              "id":1
+            }
+          ]},
+        {
+          "addTime":0,
+          "name":"test-3",
+          "id":3,
+          "queries":[
+            {"addTime":0,"query":"\"test-query-2","id":2}]},
+        {   "addTime":0,
+          "name":"test-1",
+          "id":1,
+          "queries":[
+            {"addTime":0,"query":"\"test-query-3","id":3}]}
+      ],
+      "machineLinks":[
+        {"source":0, "target":1, "left" : true, "right": false, "weight": 1, "addTime": 0},
+        {"source":0, "target":2, "left" : true, "right": false, "weight": 1, "addTime": 0},
+        {"source":1, "target":2, "left" : true, "right": false, "weight": 1, "addTime": 0},
+        {"source":3, "target":0, "left" : true, "right": false, "weight": 1, "addTime": 0}
+      ]
+    },
+    {
+      "duration": "20",
+      "id": "2",
+      "machines":[
+        {
+          "addTime":0, "name":"test-2", "id":4,
+          "queries":[
+            {"addTime":0,"query":"\"test-query-6","id":6}
+          ]},
+        {
+          "addTime":0, "name":"test-3", "id":5,
+          "queries":[
+            {"addTime":0,"query":"\"test-query-4","id":4}]},
+        { "addTime":0, "name":"test-1", "id":6,
+          "queries":[
+            {"addTime":0,"query":"\"test-query-5","id":5}]}
+      ],
+      "machineLinks":[
+        {"source":1, "target":2, "left" : true, "right": false, "weight": 0, "addTime": 0},
+        {"source":1, "target":3, "left" : true, "right": false, "weight": 0, "addTime": 0},
+        {"source":2, "target":1, "left" : true, "right": false, "weight": 0, "addTime": 0},
+        {"source":3, "target":2, "left" : true, "right": false, "weight": 0, "addTime": 0}
+      ]
+    }
+]

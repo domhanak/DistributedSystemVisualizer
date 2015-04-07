@@ -1,0 +1,71 @@
+<div class="system-view"  data-ng-controller="SystemDetailCtrl">
+    <div class="row">
+        <div class="col-lg-4">
+            <h3>System information</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Duration</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{system.id}}</td>
+                        <td>{{system.duration}}</td>
+                        <td>A test system</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-lg-4">
+            <h3>System machines</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Time of addition</th>
+                        <th>Queries total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-ng-repeat="machine in system.machines | orderBy: orderProp">
+                        <td>{{machine.id}}</td>
+                        <td>{{machine.name}}</td>
+                        <td>{{machine.addTime}}</td>
+                        <td>{{machine.queries.length}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-lg-4">
+            <h3>Highlighted machine</h3>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Query</th>
+                    <th>Time of addition</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-ng-repeat="query in selected_machine.queries | orderBy: orderProp">
+                    <td>{{query.id}}</td>
+                    <td>{{query.query}}</td>
+                    <td>{{query.addTime}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+    <div class="graph">
+        <div min="0" max="system.duration"  ng-model="currentIteration" rn-stepper></div>
+        <h2>Showing iteration number: {{ currentIteration }}</h2>
+        <system-visualization system="system" currentIteration="currentIteration"></system-visualization>
+    </div>
+</div>
