@@ -99,7 +99,9 @@ visualizerDirectives.directive('systemVisualization', function () {
                 node.y = point[1];
                 node.name = "test-" + node.id;
                 node.addTime = scope.currentIteration;
-                node.queries = [];
+
+                scope.open(node);
+
                 nodes.push(node);
 
                 // We don't want to save right away
