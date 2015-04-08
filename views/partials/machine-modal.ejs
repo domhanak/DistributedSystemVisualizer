@@ -1,0 +1,59 @@
+<div>
+    <div class="modal-header">
+        <h3 class="modal-title">Create Machine</h3>
+    </div>
+    <div class="modal-body">
+        <p> Enter basic attributes of this machine: </p>
+        <form>
+            <p> Name: <input type="text" data-ng-model="addedMachine.name"></p>
+        </form>
+
+        <h3>Queries</h3>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Query</th>
+                <th>Edit</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-ng-repeat="tmpQuery in addedMachine.queries">
+                <td>{{ tmpQuery.query }}</td>
+                <td>
+                    <button class="btn" data-ng-click="editQuery(tmpQuery.query)">
+                        <span class="glyphicon glyphicon-pencil"></span>  Edit
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <hr>
+        <button class="btn btn-success" data-ng-click="editQuery('new')">
+            <span class="glyphicon glyphicon-user"></span>  Create New Query
+        </button>
+        <hr>
+
+        <h3 ng-show="edit">Create New Query:</h3>
+        <h3 ng-hide="edit">Edit Query:</h3>
+
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Query content:</label>
+                <div class="col-sm-10">
+                    <input type="text" data-ng-disabled="!edit" data-ng-model="iQuery" placeholder="Query">
+                </div>
+            </div>
+        </form>
+
+        <hr>
+        <button data-ng-click="saveQuery()" class="btn btn-success" data-ng-disabled="error || incomplete">
+            <span class="glyphicon glyphicon-save"></span>  Save Changes
+        </button>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="submit()">OK</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</div>
