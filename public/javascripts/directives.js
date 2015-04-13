@@ -8,7 +8,6 @@ var visualizerDirectives = angular.module('visualizerDirectives', []);
 visualizerDirectives.directive('systemVisualization', function () {
     return {
         restrict: 'AE',
-        template :'<button type="button" ng-click="save()">Save iteration</button>',
         link: function (scope, elems, attrs) {
             // set up SVG for D3
             var width = 960,
@@ -76,8 +75,7 @@ visualizerDirectives.directive('systemVisualization', function () {
             var links = [];
             var lastNodeId = 0;
 
-            scope.save = function(){
-                scope.system.machines = nodes;
+            scope.saveLinks = function(){
                 scope.system.machineLinks = links;
             };
 
@@ -97,15 +95,15 @@ visualizerDirectives.directive('systemVisualization', function () {
                     node = {id: ++lastNodeId};
                 node.x = point[0];
                 node.y = point[1];
-                node.name = "test-" + node.id;
+                node.name = '';
                 node.addTime = scope.currentIteration;
 
                 scope.open(node);
 
                 nodes.push(node);
-
                 // We don't want to save right away
-                // scope.system.machines = nodes;
+                // edit: we do now because we have modal
+                scope.system.machines = nodes;
 
                 restart();
             }
@@ -171,7 +169,7 @@ visualizerDirectives.directive('systemVisualization', function () {
 
                 // update existing nodes
                 circle.selectAll('circle')
-                    .style('fill', function(d) { return (d === selected_node) ? d3.rgb(colors(d.id)).brighter().toString() : colors(d.id); })
+                    .style('fill', function(d) { return (d === selected_node) ? d3.rgb(colors(d.id)).brighter().toString() : colors(d.id); });
 
                 // add new nodes
                 var g = circle.enter().append('svg:g');
@@ -207,7 +205,10 @@ visualizerDirectives.directive('systemVisualization', function () {
                             .classed('hidden', false)
                             .attr('d', 'M' + mousedown_node.x + ',' + mousedown_node.y + 'L' + mousedown_node.x + ',' + mousedown_node.y);
 
+
+
                         restart();
+
                     })
                     .on('mouseup', function(d) {
                         if(!mousedown_node) return;
@@ -251,6 +252,7 @@ visualizerDirectives.directive('systemVisualization', function () {
                             links.push(link);
 
                             // Don't want to save right away
+                            // edit: will be in separate button
                             // scope.system.machineLinks = links;
                         }
 
@@ -258,6 +260,9 @@ visualizerDirectives.directive('systemVisualization', function () {
                         selected_link = link;
                         selected_node = null;
                         restart();
+                    })
+                    .on("dblclick", function (d){
+                        scope.open(d);
                     });
 
                 // show node names
