@@ -20,7 +20,7 @@
             <tr data-ng-repeat="tmpQuery in addedMachine.queries">
                 <td>{{ tmpQuery.query }}</td>
                 <td>
-                    <button class="btn" data-ng-click="editQuery(tmpQuery.query)">
+                    <button class="btn" data-ng-click="editQuery(tmpQuery.id)">
                         <span class="glyphicon glyphicon-pencil"></span>  Edit
                     </button>
                 </td>
@@ -30,7 +30,7 @@
 
         <hr>
         <button class="btn btn-success" data-ng-click="editQuery('new')">
-            <span class="glyphicon glyphicon-user"></span>  Create New Query
+            <span class="glyphicon glyphicon-text"></span>  Create New Query
         </button>
         <hr>
 
@@ -48,7 +48,7 @@
 
         <hr>
         <button data-ng-click="saveQuery()" class="btn btn-success" data-ng-disabled="error || incomplete">
-            <span class="glyphicon glyphicon-save"></span>  Save Changes
+            <span class="glyphicon glyphicon-comment"></span>  Save Changes
         </button>
 
     </div>
