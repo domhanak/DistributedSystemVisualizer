@@ -10,7 +10,7 @@ var visualizerApp = angular.module('visualizerApp', [
     'ui.bootstrap',
     'visualizerServices',
     'visualizerControllers',
-    'visualizerDirectives',
+    'visualizerDirectives'
     ]);
 
 visualizerApp.config(['$routeProvider',
