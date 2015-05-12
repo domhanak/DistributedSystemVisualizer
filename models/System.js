@@ -29,4 +29,5 @@ var SystemSchema = new mongoose.Schema({
     }]
 });
 
+// Hand over the schema to model
 module.exports = mongoose.model('System', SystemSchema);
