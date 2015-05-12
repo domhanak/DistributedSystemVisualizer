@@ -1,3 +1,10 @@
+/**
+ * Routing of backend api, to database.
+ * Routes defined using Express router.
+ * Provides GET. POST, PUT and DELETE methods.
+ */
+
+
 var express = require('express');
 var router = express.Router();
 
