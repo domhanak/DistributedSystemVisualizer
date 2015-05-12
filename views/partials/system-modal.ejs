@@ -1,0 +1,53 @@
+<div>
+    <div class="modal-header">
+        <h3 class="modal-title">Create System</h3>
+    </div>
+    <div class="modal-body">
+        <p> Enter basic attributes of this system: </p>
+        <form>
+            <p> Duration:    <input type="number" data-ng-model="addedSystem.duration"></p>
+            <p> Description: <input type="text" data-ng-model="addedSystem.description"></p>
+        </form>
+
+        <h3>Machines</h3>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <td>#</td>
+                <td>Name</td>
+                <td>Density</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-ng-repeat="machine in addedSystem.machines">
+                <td>{{ machine.id }}</td>
+                <td>{{ machine.name }}</td>
+                <td>{{ machine.density }}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <hr>
+
+        <h3>Create New Machine:</h3>
+
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Machine properties:</label>
+                <div class="col-sm-10">
+                    Name: <input type="text"  data-ng-model="inMachine.name" placeholder="Name">
+                    Density: <input type="text"  data-ng-model="inMachine.density" placeholder="Density">
+                </div>
+            </div>
+        </form>
+
+        <hr>
+        <button data-ng-click="saveMachine()" class="btn btn-success">
+            <span class="glyphicon glyphicon-comment"></span>  Save Changes
+        </button>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="submit()">OK</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</div>
