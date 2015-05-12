@@ -1,8 +1,9 @@
 'use strict';
 /**
- * Application module and it's routing configuration.
+ * Application module for DistributedSystemVisualizer and it's routing configuration.
  */
 
+// Creation fo main module and defining it's dependencies
 var visualizerApp = angular.module('visualizerApp', [
     'ngResource',
     'ngRoute',
@@ -13,6 +14,8 @@ var visualizerApp = angular.module('visualizerApp', [
     'visualizerDirectives'
     ]);
 
+
+// Configuration of rouing in our application
 visualizerApp.config(['$routeProvider',
     function($routeProvider) {
         $routeProvider.
