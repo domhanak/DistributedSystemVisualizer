@@ -1,13 +1,20 @@
 'use strict';
 /**
- * Created by Hany on 10. 11. 2014.
+ * Directives. This JavaScript contains all custom defined directives.
+ * It defines module vizualizerDirectives to which, our directive for viyualization
+ * is defined.
  */
 var visualizerDirectives = angular.module('visualizerDirectives', []);
 
 
+/**
+ * Directive that handles vizualization of experiments.
+ * Can be represented as atribute or element.
+ */
 visualizerDirectives.directive('systemVisualization', function () {
     return {
         restrict: 'AE',
+       // template: '<button data-ng-click="saveLinks()" class="btn btn-success"> Save all new connections </button>',
         link: function (scope, elems, attrs) {
             // set up SVG for D3
             var width = 960,
@@ -75,10 +82,6 @@ visualizerDirectives.directive('systemVisualization', function () {
             var links = [];
             var lastNodeId = 0;
 
-            scope.saveLinks = function(){
-                scope.system.machineLinks = links;
-            };
-
             // Mouse click event-handling function
             function mousedown() {
                 // prevent I-bar on drag
@@ -96,17 +99,19 @@ visualizerDirectives.directive('systemVisualization', function () {
                 node.x = point[0];
                 node.y = point[1];
                 node.name = '';
+                node.density = '';
                 node.addTime = scope.currentIteration;
 
-                scope.open(node);
+                scope.openMachineModal(node);
 
                 nodes.push(node);
                 // We don't want to save right away
                 // edit: we do now because we have modal
-                scope.system.machines = nodes;
+                scope.system.machines.push(node);
 
                 restart();
             }
+
             // Mouse dragging event-handling function
             function mousemove() {
                 if(!mousedown_node) return;
@@ -169,7 +174,17 @@ visualizerDirectives.directive('systemVisualization', function () {
 
                 // update existing nodes
                 circle.selectAll('circle')
-                    .style('fill', function(d) { return (d === selected_node) ? d3.rgb(colors(d.id)).brighter().toString() : colors(d.id); });
+                    .style('fill', function(d) {
+                            switch(d.density) {
+                            case "low" :
+                                return d3.rgb("green");
+                            case "medium" :
+                                return d3.rgb("orange");
+                            case "high" :
+                                return d3.rgb("red");
+                            default :
+                                return d3.rgb("blue");
+                    }})
 
                 // add new nodes
                 var g = circle.enter().append('svg:g');
@@ -177,11 +192,23 @@ visualizerDirectives.directive('systemVisualization', function () {
                 g.append('svg:circle')
                     .attr('class', 'node')
                     .attr('r', 12)
-                    .style('fill', function(d) { return (d === selected_node) ? d3.rgb(colors(d.id)).brighter().toString() : colors(d.id); })
+                    .style('fill', function(d) {
+                        switch(d.density) {
+                            case "low" :
+                                return d3.rgb("green");
+                            case "medium" :
+                                return d3.rgb("orange");
+                            case "high" :
+                                return d3.rgb("red");
+                            default :
+                                return d3.rgb("blue")
+                        }
+                    })
                     .style('stroke', function(d) { return d3.rgb(colors(d.id)).darker().toString(); })
                     .on('mouseover', function(d) {
                         if(!mousedown_node || d === mousedown_node) return;
                         // enlarge target node
+
                         d3.select(this).attr('transform', 'scale(1.1)');
                     })
                     .on('mouseout', function(d) {
@@ -204,9 +231,6 @@ visualizerDirectives.directive('systemVisualization', function () {
                             .style('marker-end', 'url(#end-arrow)')
                             .classed('hidden', false)
                             .attr('d', 'M' + mousedown_node.x + ',' + mousedown_node.y + 'L' + mousedown_node.x + ',' + mousedown_node.y);
-
-
-
                         restart();
 
                     })
@@ -246,23 +270,21 @@ visualizerDirectives.directive('systemVisualization', function () {
                         if(link) {
                             link[direction] = true;
                         } else {
-                            link = {source: source, target: target, left: false, right: false, "weight": 1,"addTime": scope.currentIteration};
+                            link = {source: source, target: target, left: false, right: false, weight: 1, addTime: scope.currentIteration};
 
                             link[direction] = true;
-                            links.push(link);
-
-                            // Don't want to save right away
-                            // edit: will be in separate button
-                            // scope.system.machineLinks = links;
                         }
 
-                        // select new link
+                        // select new link and store it
+                        links.push(link);
+                        scope.system.machineLinks.push(link);
                         selected_link = link;
                         selected_node = null;
                         restart();
                     })
                     .on("dblclick", function (d){
-                        scope.open(d);
+                        scope.openMachineModal(d);
+                        restart();
                     });
 
                 // show node names
@@ -302,16 +324,6 @@ visualizerDirectives.directive('systemVisualization', function () {
                 });
             }
 
-            function spliceLinksForNode(node) {
-                var toSplice = links.filter(function(l) {
-                    return (l.source === node || l.target === node);
-                });
-                toSplice.map(function(l) {
-                    links.splice(links.indexOf(l), 1);
-                });
-            }
-
-
             lastNodeId = 0;
             svg.on('mousedown', mousedown)
                 .on('mousemove', mousemove)
@@ -340,17 +352,19 @@ visualizerDirectives.directive('systemVisualization', function () {
                     }
                 });
 
-                if (lastNodeId === 0){
-                    var tmpS, tmpT;
-                    tmpLinks.forEach(function (k) {
-                        tmpS = k.source;
-                        tmpT = k.target;
-                        k.source = nodeMap[tmpS];
-                        k.target = nodeMap[tmpT];
-                    });
-                }
 
-
+                var tmpS, tmpT;
+                tmpLinks.forEach(function (k) {
+                    if (k.source != undefined && k.target != undefined){
+                        if (k.source.id != undefined && k.target.id != undefined) {
+                            var tmpS = k.source.id;
+                            var tmpT = k.target.id;
+                            k.source = tmpS;
+                            k.target = tmpT;
+                        }
+                    }
+                });
+                
                 links = tmpLinks;
                 nodes = tmpNodes;
 
@@ -364,5 +378,4 @@ visualizerDirectives.directive('systemVisualization', function () {
             });
         }
     }
-
 });
